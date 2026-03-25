@@ -13,6 +13,8 @@ def get_access_token():
             "grant_type": "refresh_token",
         }
     )
+    print(f"Google 응답: {response.status_code}")
+    print(f"Google 응답 내용: {response.text}")
     return response.json()["access_token"]
 
 def generate_article():
