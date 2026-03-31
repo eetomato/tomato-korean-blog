@@ -3,6 +3,28 @@ import requests
 import os
 import json
 
+# ✅ 추가: 텔레그램 알림 함수
+def send_telegram(message):
+    token = os.environ.get("TELEGRAM_BOT_TOKEN")
+    chat_id = os.environ.get("TELEGRAM_CHAT_ID")
+    if not token or not chat_id:
+        print("⚠️ Telegram 환경변수 미설정, 알림 스킵")
+        return
+    url = f"https://api.telegram.org/bot{token}/sendMessage"
+    payload = {
+        "chat_id": chat_id,
+        "text": message,
+        "parse_mode": "HTML"
+    }
+    try:
+        res = requests.post(url, data=payload, timeout=10)
+        if res.status_code == 200:
+            print("📨 Telegram 알림 전송 완료")
+        else:
+            print(f"⚠️ Telegram 전송 실패: {res.text}")
+    except Exception as e:
+        print(f"⚠️ Telegram 예외 발생: {e}")
+
 def get_access_token():
     response = requests.post(
         "https://oauth2.googleapis.com/token",
